@@ -7,6 +7,7 @@
 
 from gpio import MGPIO
 from display import MDisplay
+# import colorsys
 
 
 def main():
@@ -14,7 +15,17 @@ def main():
         main function
     :return: 0 on success
     """
-    pass
+    h_gpio = MGPIO()
+    h_disp = MDisplay()
+
+
+    while True:
+        pass
+        # colorsys.hsv_to_rgb(h, s, v)
+        # h_disp.update_bg()
+
+        # get h, s and v
+        # define the steps of each (10?)
 
 
 if __name__ == '__main__':
