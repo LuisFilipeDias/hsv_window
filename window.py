@@ -5,11 +5,10 @@
 """
 from tkinter import *
 
-myFont = ('Times', 24, 'bold')
+window_font = ('Times', 24, 'bold')
 
-#################################
 
-class MDisplay(object):
+class Window(object):
     """
         Handles display related operations
     """
@@ -18,6 +17,7 @@ class MDisplay(object):
         """
             the initializer sets up some display parameters
         """
+        # instantiate TK
         self.window = Tk()
         # initialize window as black
         self.window.configure(bg='#000000')
@@ -27,25 +27,30 @@ class MDisplay(object):
         self.window.geometry('800x480')
 
         # close button is always handy
-        exitButton = Button(self.window, text="Exit", font=myFont,
-                            command=self.exitProgram, height=2, width=6)
-        exitButton.pack(pady=20, padx=20)
+        exit_button = Button(self.window, text="Exit", font=window_font,
+                            command=self.exit, height=2, width=6)
+        exit_button.pack(pady=0, padx=0)
 
-    def update_bg(self, r, g, b):
+    def update_background(self, r, g, b):
         """
             update the background according to H, S & V
         """
-        # initialize window as black
+        # save value to byte-length hex
         r = format(int(r * 0xFF), '02x')
         g = format(int(g * 0xFF), '02x')
         b = format(int(b * 0xFF), '02x')
+        # save rgb into string
         background = '#' + str(r) + str(g) + str(b)
+        # configure background
         self.window.configure(bg=background)
 
     def loop(self):
+        """
+            the loop of the gui
+        """
         self.window.mainloop()
 
-    def exitProgram(self):
+    def exit(self):
         """
             called when exit button is pressed
         """
