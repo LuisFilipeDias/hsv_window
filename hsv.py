@@ -15,51 +15,63 @@ VALUE_H = 23
 VALUE_L = 24
 
 
-class MGPIO(object):
+class HSV(object):
     """
-        Handles gpio related operations
+        The HSV GPIO class
     """
 
-    h = 0
-    s = 0
-    v = 0
+    # these static values hold the current HSV value
+    H = 0
+    S = 0
+    V = 0
 
-    def __init__(self, disp):
+    def __init__(self, window):
         """
             the initializer
             GPIO's direction and event listeners are setup here
         """
         self.value = 0x00
-        self.disp = disp
+        self.window = window
         GPIO.setmode(GPIO.BCM)
 
-    def inc_value(self, foo):
+    def increase(self, foo):
         """
             increase value callback
         """
+        # lets use 10-steps for each parameter
         if self.value < 0x0A:
             self.value += 1
-        self.refresh()
-        self.update_bg()
+        # save the value on the class
+        self.save_value()
+        # convert to rgb and update window
+        self.update()
 
-    def dec_value(self, foo):
+    def decrease(self, foo):
         """
             decrease value callback
         """
+        # value doesn't make sense below 0
         if self.value > 0x00:
             self.value -= 1
-        self.refresh()
-        self.update_bg()
+        # save the value on the class
+        self.save_value()
+        # convert to rgb and update window
+        self.update()
 
-    def update_bg(self):
-        (r,g,b) = colorsys.hsv_to_rgb(MGPIO.h/10, MGPIO.s/10, MGPIO.v/10)
-        self.disp.update_bg(r, g,b)
-    
-    def get_value(self):
+    def update(self):
         """
-            return the value
+            convert hsv to rgb and call window update background
         """
-        return self.value
+        # convert hsv to rgb using colorsys
+        (r, g, b) = colorsys.hsv_to_rgb(HSV.H / 10, HSV.S / 10, HSV.V / 10)
+        # the update operation itself
+        self.window.update_background(r, g, b)
+
+    def save_value(self):
+        """
+            save value on the class - for warning purposes
+        """
+        pass
 
     def __del__(self):
         """
@@ -68,7 +80,10 @@ class MGPIO(object):
         pass
 
 
-class MGPIO_H(MGPIO):
+class Hue(HSV):
+    """
+        The Hue GPIO class
+    """
     def __init__(self, disp):
         """
             the initializer: configure ports and callbacks
@@ -82,14 +97,21 @@ class MGPIO_H(MGPIO):
 
         # Add event interrupt callbacks on falling edges
         GPIO.add_event_detect(HUE_H, GPIO.FALLING,
-                              callback=self.inc_value, bouncetime=300)
+                              callback=self.increase, bouncetime=300)
         GPIO.add_event_detect(HUE_L, GPIO.FALLING,
-                              callback=self.dec_value, bouncetime=300)
+                              callback=self.decrease, bouncetime=300)
 
-    def refresh(self):
-        MGPIO.h = self.value
+    def save_value(self):
+        """
+            save value on the class
+        """
+        HSV.H = self.value
 
-class MGPIO_S(MGPIO):
+
+class Saturation(HSV):
+    """
+        The Saturation GPIO class
+    """
     def __init__(self, disp):
         """
             the initializer: configure ports and callbacks
@@ -99,14 +121,21 @@ class MGPIO_S(MGPIO):
         GPIO.setup(SATURATION_L, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         GPIO.add_event_detect(SATURATION_H, GPIO.FALLING,
-                              callback=self.inc_value, bouncetime=300)
+                              callback=self.increase, bouncetime=300)
         GPIO.add_event_detect(SATURATION_L, GPIO.FALLING,
-                              callback=self.dec_value, bouncetime=300)
+                              callback=self.decrease, bouncetime=300)
 
-    def refresh(self):
-        MGPIO.s = self.value
-    
-class MGPIO_V(MGPIO):
+    def save_value(self):
+        """
+            save value on the class
+        """
+        HSV.S = self.value
+
+
+class Value(HSV):
+    """
+        The Value GPIO class
+    """
     def __init__(self, disp):
         """
             the initializer: configure ports and callbacks
@@ -116,10 +145,12 @@ class MGPIO_V(MGPIO):
         GPIO.setup(VALUE_L, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         GPIO.add_event_detect(VALUE_H, GPIO.FALLING,
-                              callback=self.inc_value, bouncetime=300)
+                              callback=self.increase, bouncetime=300)
         GPIO.add_event_detect(VALUE_L, GPIO.FALLING,
-                              callback=self.dec_value, bouncetime=300)
-    
-    def refresh(self):
-        MGPIO.v = self.value
-    
+                              callback=self.decrease, bouncetime=300)
+
+    def save_value(self):
+        """
+            save value on the class
+        """
+        HSV.V = self.value

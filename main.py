@@ -5,10 +5,9 @@
             2016
 """
 
-from gpio import MGPIO_H, MGPIO_S, MGPIO_V
-from display import MDisplay
+from display import Window
+from gpio import Hue, Saturation, Value
 
-import time
 
 def main():
     """
@@ -16,12 +15,18 @@ def main():
     :return: 0 on success
     """
 
-    h_disp = MDisplay()
-    gpio_h = MGPIO_H(h_disp)
-    gpio_s = MGPIO_S(h_disp)
-    gpio_v = MGPIO_V(h_disp)
+    # create window object
+    window = Window()
 
-    h_disp.loop()
+    # create the HSV objects, no need to
+    # keep the instance, everything is handled
+    # via interruptions inside
+    Hue(window)
+    Saturation(window)
+    Value(window)
+
+    # start window loop
+    window.loop()
 
 if __name__ == '__main__':
     main()
