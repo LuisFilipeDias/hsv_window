@@ -11,8 +11,8 @@ HUE_H = 12
 HUE_L = 13
 # GPIO_3 pin 11
 SATURATION_H = 11
-# GPIO_4 pin 16
-SATURATION_L = 16
+# GPIO_4 pin 7
+SATURATION_L = 7
 # GPIO_5 pin 18
 VALUE_H = 18
 # GPIO_6 pin 22
@@ -28,7 +28,6 @@ class MGPIO(object):
             the initializer
             GPIO's direction and event listeners are setup here
         """
-
         GPIO.setmode(GPIO.BCM)
 
 
@@ -139,3 +138,4 @@ class MGPIO_V(MGPIO):
             the terminator
         """
         pass
+
