@@ -4,6 +4,7 @@
             2016
 """
 import RPi.GPIO as GPIO
+import colorsys
 
 # define the pins of each HSV controller
 HUE_H = 17
@@ -19,28 +20,41 @@ class MGPIO(object):
         Handles gpio related operations
     """
 
-    def __init__(self):
+    h = 0
+    s = 0
+    v = 0
+
+    def __init__(self, disp):
         """
             the initializer
             GPIO's direction and event listeners are setup here
         """
         self.value = 0x00
+        self.disp = disp
         GPIO.setmode(GPIO.BCM)
 
-    def inc_value(self, v):
+    def inc_value(self, foo):
         """
             increase value callback
         """
-        if self.value < 0xFF:
+        if self.value < 0x0A:
             self.value += 1
+        self.refresh()
+        self.update_bg()
 
-    def dec_value(self, v):
+    def dec_value(self, foo):
         """
             decrease value callback
         """
         if self.value > 0x00:
             self.value -= 1
+        self.refresh()
+        self.update_bg()
 
+    def update_bg(self):
+        (r,g,b) = colorsys.hsv_to_rgb(MGPIO.h/10, MGPIO.s/10, MGPIO.v/10)
+        self.disp.update_bg(r, g,b)
+    
     def get_value(self):
         """
             return the value
@@ -55,11 +69,11 @@ class MGPIO(object):
 
 
 class MGPIO_H(MGPIO):
-    def __init__(self):
+    def __init__(self, disp):
         """
             the initializer: configure ports and callbacks
         """
-        super().__init__()
+        super().__init__(disp)
         # GPIO's set up as inputs.
         # They should be pulled up to avoid false detections.
         # All ports are wired to connect to GND on button press.
@@ -72,13 +86,15 @@ class MGPIO_H(MGPIO):
         GPIO.add_event_detect(HUE_L, GPIO.FALLING,
                               callback=self.dec_value, bouncetime=300)
 
+    def refresh(self):
+        MGPIO.h = self.value
 
 class MGPIO_S(MGPIO):
-    def __init__(self):
+    def __init__(self, disp):
         """
             the initializer: configure ports and callbacks
         """
-        super().__init__()
+        super().__init__(disp)
         GPIO.setup(SATURATION_H, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(SATURATION_L, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -87,13 +103,15 @@ class MGPIO_S(MGPIO):
         GPIO.add_event_detect(SATURATION_L, GPIO.FALLING,
                               callback=self.dec_value, bouncetime=300)
 
-
+    def refresh(self):
+        MGPIO.s = self.value
+    
 class MGPIO_V(MGPIO):
-    def __init__(self):
+    def __init__(self, disp):
         """
             the initializer: configure ports and callbacks
         """
-        super().__init__()
+        super().__init__(disp)
         GPIO.setup(VALUE_H, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(VALUE_L, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -101,3 +119,7 @@ class MGPIO_V(MGPIO):
                               callback=self.inc_value, bouncetime=300)
         GPIO.add_event_detect(VALUE_L, GPIO.FALLING,
                               callback=self.dec_value, bouncetime=300)
+    
+    def refresh(self):
+        MGPIO.v = self.value
+    
