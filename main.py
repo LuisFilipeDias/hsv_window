@@ -5,8 +5,8 @@
             2016
 """
 
-from display import Window
-from gpio import Hue, Saturation, Value
+from window import Window
+from hsv import Hue, Saturation, Value
 
 
 def main():
