@@ -86,7 +86,6 @@ class MGPIO_S(MGPIO):
                               callback=self.inc_value, bouncetime=300)
         GPIO.add_event_detect(SATURATION_L, GPIO.FALLING,
                               callback=self.dec_value, bouncetime=300)
-        self.value = 0
 
 
 class MGPIO_V(MGPIO):
@@ -102,4 +101,3 @@ class MGPIO_V(MGPIO):
                               callback=self.inc_value, bouncetime=300)
         GPIO.add_event_detect(VALUE_L, GPIO.FALLING,
                               callback=self.dec_value, bouncetime=300)
-        self.value = 0
