@@ -24,20 +24,22 @@ class MGPIO(object):
             the initializer
             GPIO's direction and event listeners are setup here
         """
-        self.value = 0
+        self.value = 0x00
         GPIO.setmode(GPIO.BCM)
 
     def inc_value(self):
         """
             increase value callback
         """
-        self.value += 1
+        if self.value < 0xFF:
+            self.value += 1
 
     def dec_value(self):
         """
             decrease value callback
         """
-        self.value -= 1
+        if self.value > 0x00:
+            self.value -= 1
 
     def get_value(self):
         """

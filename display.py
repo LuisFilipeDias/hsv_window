@@ -28,13 +28,15 @@ class MDisplay(object):
         # close button is always handy
         exitButton = Button(self.win, text="Exit", font=myFont,
                             command=self.exitProgram, height=2, width=6)
-        # exitButton.pack(side=Bottom)
-	
-    def update_bg(self, h, s, v):
+        exitButton.pack(pady=20, padx=20)
+
+    def update_bg(self, r, g, b):
         """
             update the background according to H, S & V
         """
-        pass
+        # initialize window as black
+        background = '#' + str(r) + str(g) + str(b)
+        self.win.configure(bg=background)
 
     def loop(self):
         self.win.mainloop()
