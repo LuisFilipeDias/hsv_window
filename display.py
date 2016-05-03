@@ -3,9 +3,9 @@
     Luis Filipe Ribeiro Dias
             2016
 """
-from Tkinter import *
+from tkinter import *
 
-myFont = tkFont.Font(familit='Helvetica', size=36, weight='bold')
+myFont = ('Times', 24, 'bold')
 
 
 class MDisplay(object):
@@ -27,14 +27,17 @@ class MDisplay(object):
 
         # close button is always handy
         exitButton = Button(self.win, text="Exit", font=myFont,
-                            command=exitProgram, height=2, width=6)
-        exitButton.pack(side=Bottom)
-
+                            command=self.exitProgram, height=2, width=6)
+        # exitButton.pack(side=Bottom)
+	
     def update_bg(self, h, s, v):
         """
             update the background according to H, S & V
         """
         pass
+
+    def loop(self):
+        self.win.mainloop()
 
     def exitProgram(self):
         """
@@ -46,4 +49,3 @@ class MDisplay(object):
         """
             the terminator
         """
-        self.win.quit()

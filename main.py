@@ -19,7 +19,7 @@ def main():
     gpio_s = MGPIO_S()
     gpio_v = MGPIO_V()
     h_disp = MDisplay()
-
+    h_disp.loop()
 
     while True:
         pass
