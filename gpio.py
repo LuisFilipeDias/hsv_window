@@ -6,12 +6,12 @@
 import RPi.GPIO as GPIO
 
 # define the pins of each HSV controller
-HUE_H = 12
-HUE_L = 13
-SATURATION_H = 11
-SATURATION_L = 7
-VALUE_H = 18
-VALUE_L = 22
+HUE_H = 17
+HUE_L = 18
+SATURATION_H = 27
+SATURATION_L = 22
+VALUE_H = 23
+VALUE_L = 24
 
 
 class MGPIO(object):
@@ -27,14 +27,14 @@ class MGPIO(object):
         self.value = 0x00
         GPIO.setmode(GPIO.BCM)
 
-    def inc_value(self):
+    def inc_value(self, v):
         """
             increase value callback
         """
         if self.value < 0xFF:
             self.value += 1
 
-    def dec_value(self):
+    def dec_value(self, v):
         """
             decrease value callback
         """
@@ -60,7 +60,6 @@ class MGPIO_H(MGPIO):
             the initializer: configure ports and callbacks
         """
         super().__init__()
-
         # GPIO's set up as inputs.
         # They should be pulled up to avoid false detections.
         # All ports are wired to connect to GND on button press.
@@ -80,7 +79,6 @@ class MGPIO_S(MGPIO):
             the initializer: configure ports and callbacks
         """
         super().__init__()
-
         GPIO.setup(SATURATION_H, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(SATURATION_L, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -88,7 +86,6 @@ class MGPIO_S(MGPIO):
                               callback=self.inc_value, bouncetime=300)
         GPIO.add_event_detect(SATURATION_L, GPIO.FALLING,
                               callback=self.dec_value, bouncetime=300)
-        self.value = 0
 
 
 class MGPIO_V(MGPIO):
@@ -97,7 +94,6 @@ class MGPIO_V(MGPIO):
             the initializer: configure ports and callbacks
         """
         super().__init__()
-
         GPIO.setup(VALUE_H, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(VALUE_L, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -105,4 +101,3 @@ class MGPIO_V(MGPIO):
                               callback=self.inc_value, bouncetime=300)
         GPIO.add_event_detect(VALUE_L, GPIO.FALLING,
                               callback=self.dec_value, bouncetime=300)
-        self.value = 0

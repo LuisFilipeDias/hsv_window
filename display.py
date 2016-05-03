@@ -7,6 +7,7 @@ from tkinter import *
 
 myFont = ('Times', 24, 'bold')
 
+#################################
 
 class MDisplay(object):
     """
@@ -17,16 +18,16 @@ class MDisplay(object):
         """
             the initializer sets up some display parameters
         """
-        self.win = Tk()
+        self.window = Tk()
         # initialize window as black
-        self.win.configure(bg='#000000')
+        self.window.configure(bg='#000000')
         # give it a title
-        self.win.title("HSV Exercise")
+        self.window.title("HSV Exercise")
         # and a geometry
-        self.win.geometry('800x480')
+        self.window.geometry('800x480')
 
         # close button is always handy
-        exitButton = Button(self.win, text="Exit", font=myFont,
+        exitButton = Button(self.window, text="Exit", font=myFont,
                             command=self.exitProgram, height=2, width=6)
         exitButton.pack(pady=20, padx=20)
 
@@ -35,19 +36,24 @@ class MDisplay(object):
             update the background according to H, S & V
         """
         # initialize window as black
+        r = format(int(r * 0xFF), '02x')
+        g = format(int(g * 0xFF), '02x')
+        b = format(int(b * 0xFF), '02x')
         background = '#' + str(r) + str(g) + str(b)
-        self.win.configure(bg=background)
+        self.window.configure(bg=background)
 
     def loop(self):
-        self.win.mainloop()
+        self.window.mainloop()
 
     def exitProgram(self):
         """
             called when exit button is pressed
         """
-        pass
+        print("Goodbye, cruel world...")
+        self.window.quit()
 
     def __del__(self):
         """
             the terminator
         """
+        pass
