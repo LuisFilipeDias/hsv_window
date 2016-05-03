@@ -5,7 +5,7 @@
             2016
 """
 
-from gpio import MGPIO
+from gpio import MGPIO_H, MGPIO_S, MGPIO_V
 from display import MDisplay
 # import colorsys
 
@@ -15,9 +15,11 @@ def main():
         main function
     :return: 0 on success
     """
-    h_gpio = MGPIO()
+    gpio_h = MGPIO_H()
+    gpio_s = MGPIO_S()
+    gpio_v = MGPIO_V()
     h_disp = MDisplay()
-
+    h_disp.loop()
 
     while True:
         pass
