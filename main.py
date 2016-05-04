@@ -5,6 +5,9 @@
             2016
 """
 
+import sys
+assert sys.version_info[0] >= 3
+
 from window import Window
 from hsv import Hue, Saturation, Value
 

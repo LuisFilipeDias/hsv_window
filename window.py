@@ -29,7 +29,7 @@ class Window(object):
         # close button is always handy
         exit_button = Button(self.window, text="Exit", font=window_font,
                             command=self.exit, height=2, width=6)
-        exit_button.pack(pady=0, padx=0)
+        exit_button.pack(pady=200, padx=0)
 
     def update_background(self, r, g, b):
         """
